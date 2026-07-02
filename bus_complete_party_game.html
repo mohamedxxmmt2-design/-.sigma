@@ -1,0 +1,1444 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>أتوبيس كومبليت السريع | لعبة الحفلات اللفظية</title>
+  <!-- Google Fonts: Cairo -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <style>
+    /* Reset & CSS Variables */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Cairo', system-ui, -apple-system, sans-serif;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    :root {
+      --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+      --card-bg: rgba(30, 41, 59, 0.7);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --primary: #06b6d4;
+      --primary-hover: #0891b2;
+      --primary-glow: rgba(6, 182, 212, 0.35);
+      --accent-violet: #8b5cf6;
+      --accent-violet-hover: #7c3aed;
+      --success: #10b981;
+      --success-hover: #059669;
+      --danger: #f43f5e;
+      --danger-hover: #e11d48;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+      --shadow-glow: 0 0 15px rgba(6, 182, 212, 0.15);
+    }
+
+    body {
+      background: var(--bg-gradient);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 1.5rem 1rem;
+      overflow-x: hidden;
+    }
+
+    /* Scrollbars */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(15, 23, 42, 0.5);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 99px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.25);
+    }
+
+    /* Container */
+    .container {
+      width: 100%;
+      max-width: 640px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      flex-grow: 1;
+    }
+
+    /* App Header */
+    header {
+      text-align: center;
+      margin-bottom: 0.5rem;
+      animation: fadeInDown 0.6s ease-out;
+    }
+
+    .logo-container {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(6, 182, 212, 0.15);
+      border: 1px solid rgba(6, 182, 212, 0.3);
+      padding: 0.5rem 1.25rem;
+      border-radius: 999px;
+      margin-bottom: 0.75rem;
+      box-shadow: var(--shadow-glow);
+    }
+
+    .logo-icon {
+      font-size: 1.35rem;
+      margin-left: 0.5rem;
+      animation: wiggle 2s infinite ease-in-out;
+    }
+
+    .logo-text {
+      font-size: 0.9rem;
+      font-weight: 800;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    h1 {
+      font-size: 2.25rem;
+      font-weight: 900;
+      color: #ffffff;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+      margin-bottom: 0.25rem;
+      letter-spacing: -0.5px;
+    }
+
+    .subtitle {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
+    /* Cards & Containers */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: 1.5rem;
+      padding: 1.75rem;
+      box-shadow: var(--shadow-lg);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      animation: scaleUp 0.4s ease-out;
+    }
+
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 1.25rem;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      padding-bottom: 0.75rem;
+    }
+
+    /* Form Fields */
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--text-main);
+    }
+
+    /* Select Controls */
+    .select-wrapper {
+      position: relative;
+    }
+
+    select, input[type="text"] {
+      width: 100%;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1.5px solid rgba(255, 255, 255, 0.1);
+      color: #ffffff;
+      padding: 0.85rem 1rem;
+      border-radius: 0.75rem;
+      font-size: 1rem;
+      font-weight: 500;
+      outline: none;
+      transition: all 0.25s ease;
+      direction: rtl;
+    }
+
+    select:focus, input[type="text"]:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.2);
+    }
+
+    /* Dynamic Names Grid */
+    .names-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1rem;
+      max-height: 250px;
+      overflow-y: auto;
+      padding: 0.25rem;
+      margin-bottom: 1rem;
+      border-radius: 0.5rem;
+    }
+
+    .name-input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .name-num-badge {
+      position: absolute;
+      right: 1rem;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--primary);
+      background: rgba(6, 182, 212, 0.1);
+      width: 22px;
+      height: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .name-input-wrapper input {
+      padding-right: 2.75rem;
+    }
+
+    /* Custom Category Checkboxes Grid */
+    .categories-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.75rem;
+    }
+
+    @media (max-width: 480px) {
+      .categories-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .category-checkbox {
+      position: relative;
+      cursor: pointer;
+    }
+
+    .category-checkbox input {
+      position: absolute;
+      opacity: 0;
+      cursor: pointer;
+      height: 0;
+      width: 0;
+    }
+
+    .category-card {
+      background: rgba(15, 23, 42, 0.4);
+      border: 1.5px solid rgba(255, 255, 255, 0.08);
+      padding: 0.85rem;
+      border-radius: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .category-checkbox input:checked ~ .category-card {
+      background: rgba(139, 92, 246, 0.15);
+      border-color: var(--accent-violet);
+      box-shadow: 0 4px 15px rgba(139, 92, 246, 0.1);
+    }
+
+    .category-icon {
+      font-size: 1.5rem;
+      background: rgba(255, 255, 255, 0.05);
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 0.5rem;
+      transition: all 0.25s ease;
+    }
+
+    .category-checkbox input:checked ~ .category-card .category-icon {
+      background: rgba(139, 92, 246, 0.25);
+      transform: scale(1.05);
+    }
+
+    .category-details {
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+
+    .category-name {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: #ffffff;
+    }
+
+    .category-example {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .category-badge {
+      width: 18px;
+      height: 18px;
+      border: 1.5px solid var(--text-muted);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+
+    .category-checkbox input:checked ~ .category-card .category-badge {
+      border-color: var(--accent-violet);
+      background: var(--accent-violet);
+    }
+
+    .category-badge::after {
+      content: "✔";
+      font-size: 0.65rem;
+      color: white;
+      display: none;
+    }
+
+    .category-checkbox input:checked ~ .category-card .category-badge::after {
+      display: block;
+    }
+
+    /* Buttons */
+    .btn {
+      width: 100%;
+      background: var(--primary);
+      color: #ffffff;
+      border: none;
+      padding: 1rem 1.5rem;
+      border-radius: 0.75rem;
+      font-size: 1.1rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      box-shadow: 0 4px 14px var(--primary-glow);
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn:hover {
+      background: var(--primary-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px var(--primary-glow);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+    }
+
+    .btn-violet {
+      background: var(--accent-violet);
+      box-shadow: 0 4px 14px rgba(139, 92, 246, 0.3);
+    }
+
+    .btn-violet:hover {
+      background: var(--accent-violet-hover);
+      box-shadow: 0 6px 20px rgba(139, 92, 246, 0.45);
+    }
+
+    .btn-success {
+      background: var(--success);
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+    }
+
+    .btn-success:hover {
+      background: var(--success-hover);
+      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.45);
+    }
+
+    .btn-danger {
+      background: var(--danger);
+      box-shadow: 0 4px 14px rgba(244, 63, 94, 0.3);
+    }
+
+    .btn-danger:hover {
+      background: var(--danger-hover);
+      box-shadow: 0 6px 20px rgba(244, 63, 94, 0.45);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-main);
+      box-shadow: none;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.15);
+      box-shadow: none;
+    }
+
+    .btn-icon {
+      font-size: 1.2rem;
+    }
+
+    /* Gameplay Screen Components */
+    .turn-indicator-card {
+      background: linear-gradient(135deg, rgba(6, 182, 212, 0.15) 0%, rgba(139, 92, 246, 0.15) 100%);
+      border: 1.5px solid rgba(6, 182, 212, 0.25);
+      border-radius: 1.25rem;
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      animation: pulseGlow 3s infinite alternate;
+    }
+
+    .turn-label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .turn-avatar {
+      width: 32px;
+      height: 32px;
+      background: var(--primary);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 0.95rem;
+      color: #0f172a;
+    }
+
+    .turn-text {
+      font-size: 1.15rem;
+      font-weight: 800;
+    }
+
+    .turn-text span {
+      color: var(--primary);
+      position: relative;
+    }
+
+    /* Game Card Letter & Category */
+    .game-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2.5rem 1.5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Decorative elements */
+    .game-card::before {
+      content: "";
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(6, 182, 212, 0.08) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .letter-display {
+      width: 110px;
+      height: 110px;
+      background: rgba(15, 23, 42, 0.6);
+      border: 3px solid var(--primary);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3.5rem;
+      font-weight: 900;
+      color: #ffffff;
+      margin-bottom: 1.25rem;
+      box-shadow: 0 0 20px var(--primary-glow);
+      animation: scalePop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .category-display {
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+      animation: fadeInUp 0.4s ease-out;
+    }
+
+    .category-display-icon {
+      font-size: 2rem;
+    }
+
+    .category-desc {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+    }
+
+    /* Timer Area */
+    .timer-container {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .timer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    .timer-value {
+      font-weight: 900;
+      font-size: 1.15rem;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .timer-value.danger {
+      color: var(--danger);
+      animation: heartbeat 0.6s infinite alternate;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 10px;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 99px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 100%;
+      background: linear-gradient(90deg, var(--primary) 0%, var(--accent-violet) 100%);
+      border-radius: 99px;
+      transition: width 0.1s linear;
+    }
+
+    .progress-bar.danger {
+      background: linear-gradient(90deg, var(--danger) 0%, #f43f5e 100%);
+    }
+
+    /* Control Grid */
+    .controls-grid {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      gap: 0.75rem;
+      width: 100%;
+    }
+
+    /* Scoreboard */
+    .scoreboard-card {
+      padding: 1.25rem 1.5rem;
+    }
+
+    .table-container {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: right;
+    }
+
+    th {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    td {
+      padding: 0.85rem 0.25rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    .player-row {
+      transition: background 0.25s ease;
+    }
+
+    .player-row.active-row {
+      background: rgba(6, 182, 212, 0.05);
+    }
+
+    .rank-cell {
+      width: 40px;
+      text-align: center;
+    }
+
+    .rank-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      font-size: 0.8rem;
+      font-weight: 800;
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    tr:nth-child(1) .rank-badge {
+      background: #f59e0b;
+      color: #0f172a;
+    }
+
+    tr:nth-child(2) .rank-badge {
+      background: #cbd5e1;
+      color: #0f172a;
+    }
+
+    tr:nth-child(3) .rank-badge {
+      background: #b45309;
+      color: #ffffff;
+    }
+
+    .player-name-cell {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .score-badge {
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    .score-badge.minus {
+      color: var(--danger);
+    }
+
+    .stat-badge {
+      font-size: 0.75rem;
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-muted);
+    }
+
+    /* Sound Control Button */
+    .sound-toggle-btn {
+      position: fixed;
+      left: 1rem;
+      top: 1rem;
+      background: rgba(30, 41, 59, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(8px);
+      color: var(--text-main);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 100;
+      box-shadow: var(--shadow-lg);
+      transition: all 0.2s ease;
+    }
+
+    .sound-toggle-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      transform: scale(1.05);
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: rgba(30, 41, 59, 0.95);
+      border: 1.5px solid var(--accent-violet);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 15px rgba(139, 92, 246, 0.2);
+      border-radius: 0.75rem;
+      padding: 0.85rem 1.5rem;
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 0.95rem;
+      z-index: 999;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      direction: rtl;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    /* Animations */
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes scaleUp {
+      from {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes scalePop {
+      0% {
+        transform: scale(0);
+      }
+      80% {
+        transform: scale(1.1);
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(15px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes pulseGlow {
+      from {
+        box-shadow: 0 0 10px rgba(6, 182, 212, 0.05);
+      }
+      to {
+        box-shadow: 0 0 20px rgba(6, 182, 212, 0.2);
+      }
+    }
+
+    @keyframes wiggle {
+      0%, 100% { transform: rotate(0deg); }
+      25% { transform: rotate(-8deg); }
+      75% { transform: rotate(8deg); }
+    }
+
+    @keyframes heartbeat {
+      from { transform: scale(1); }
+      to { transform: scale(1.08); }
+    }
+
+    /* Screen management utility */
+    .screen {
+      display: none;
+      flex-direction: column;
+      gap: 1.25rem;
+      width: 100%;
+    }
+
+    .screen.active {
+      display: flex;
+    }
+
+    /* Footer Credits */
+    footer {
+      text-align: center;
+      margin-top: 2rem;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    footer a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Audio Toggle Control -->
+  <button id="soundToggle" class="sound-toggle-btn" title="كتم/تفعيل الصوت">
+    🔊
+  </button>
+
+  <div class="container">
+    
+    <!-- Application Header -->
+    <header>
+      <div class="logo-container">
+        <span class="logo-icon">🚌</span>
+        <span class="logo-text">أتوبيس كومبليت السريع</span>
+      </div>
+      <h1>أتوبيس كومبليت</h1>
+      <p class="subtitle">لعبة الحفلات والتحدي اللفظي الكلاسيكية</p>
+    </header>
+
+    <!-- Phase 1: Setup Screen -->
+    <div id="setupScreen" class="screen active">
+      <div class="card">
+        <div class="card-title">
+          <span>👥</span> إعداد اللاعبين والأسماء
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label" for="playerCount">عدد اللاعبين</label>
+          <div class="select-wrapper">
+            <select id="playerCount">
+              <option value="2">لاعبان (2)</option>
+              <option value="3">3 لاعبين</option>
+              <option value="4" selected>4 لاعبين</option>
+              <option value="5">5 لاعبين</option>
+              <option value="6">6 لاعبين</option>
+              <option value="7">7 لاعبين</option>
+              <option value="8">8 لاعبين</option>
+              <option value="9">9 لاعبين</option>
+              <option value="10">10 لاعبين</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">أسماء اللاعبين</label>
+          <div id="playerNamesContainer" class="names-grid">
+            <!-- Dynamic name input fields injected here -->
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <span>🎯</span> اختيار الفئات والوقت
+        </div>
+
+        <div class="form-group" style="margin-bottom: 1.25rem;">
+          <label class="form-label" for="timerValue">زمن الإجابة (ثانية)</label>
+          <div class="select-wrapper">
+            <select id="timerValue">
+              <option value="10">10 ثوانٍ (تحدي قوي)</option>
+              <option value="15" selected>15 ثانية (متوازن)</option>
+              <option value="20">20 ثانية (سهل)</option>
+              <option value="30">30 ثانية (للمبتدئين)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" style="margin-bottom: 0.75rem;">الفئات النشطة في اللعبة</label>
+          <div id="categoriesContainer" class="categories-grid">
+            <!-- Dynamic Categories Checkboxes -->
+          </div>
+        </div>
+
+        <button id="startGameBtn" class="btn btn-violet" style="margin-top: 0.5rem;">
+          <span class="btn-icon">⚡</span> ابدأ اللعب الآن
+        </button>
+      </div>
+    </div>
+
+    <!-- Phase 2: Gameplay Screen -->
+    <div id="gameplayScreen" class="screen">
+      
+      <!-- Current Turn Card -->
+      <div class="turn-indicator-card">
+        <div class="turn-label">
+          <div id="currentTurnAvatar" class="turn-avatar">أ</div>
+          <div class="turn-text">دور اللاعب: <span id="currentTurnPlayer">تحميل...</span></div>
+        </div>
+        <div id="roundIndicator" class="stat-badge" style="font-size: 0.85rem; font-weight: 700;">الجولة: 1</div>
+      </div>
+
+      <!-- Main Game Card (Letter & Category) -->
+      <div class="card game-card">
+        <div id="letterDisplay" class="letter-display">أ</div>
+        <div class="category-display">
+          <span id="categoryDisplayIcon" class="category-display-icon">🦁</span>
+          <span id="categoryDisplayName">تحميل...</span>
+        </div>
+        <div id="categoryExample" class="category-desc">المثال: أسد، بطة، تمساح</div>
+
+        <!-- Progress/Timer Indicator -->
+        <div class="timer-container">
+          <div class="timer-header">
+            <span>الوقت المتبقي</span>
+            <div id="timerDisplay" class="timer-value">⏱ 15ث</div>
+          </div>
+          <div class="progress-track">
+            <div id="timerProgress" class="progress-bar"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Turn Control Actions -->
+      <div class="controls-grid">
+        <button id="answerCorrectBtn" class="btn btn-success">
+          <span class="btn-icon">✔</span> إجابة صحيحة
+        </button>
+        <button id="answerWrongBtn" class="btn btn-danger">
+          <span class="btn-icon">✖</span> خسر / انتهى الوقت
+        </button>
+      </div>
+
+      <!-- Realtime Scoreboard -->
+      <div class="card scoreboard-card">
+        <div class="card-title" style="margin-bottom: 0.75rem; font-size: 1.1rem;">
+          <span>🏆</span> لوحة الصدارة الحية
+        </div>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th class="rank-cell">المركز</th>
+                <th>اللاعب</th>
+                <th style="text-align: center;">الصح / الخطأ</th>
+                <th style="text-align: left; padding-left: 0.5rem;">النقاط</th>
+              </tr>
+            </thead>
+            <tbody id="scoreboardBody">
+              <!-- Score rows injected here -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Action reset / bottom controllers -->
+      <button id="resetGameBtn" class="btn btn-secondary" style="margin-top: 0.25rem;">
+        <span>🔄</span> إعادة تعيين ورجوع للقائمة
+      </button>
+    </div>
+
+    <!-- Footer Details -->
+    <footer>
+      <span>أتوبيس كومبليت السريع © 2026 - جاهز للنشر على GitHub Pages</span>
+      <span>صُمم بواجهة عصرية سريعة تدعم اللعب المحلي المشترك</span>
+    </footer>
+
+  </div>
+
+  <!-- Toast Element -->
+  <div id="toast" class="toast">📢 تم نسخ الكود!</div>
+
+  <script>
+    // Constants
+    const ARABIC_LETTERS = [
+      'أ', 'ب', 'ت', 'ث', 'ج', 'ح', 'خ', 'د', 'ذ', 'ر', 'ز', 'س', 'ش', 'ص', 'ض', 'ط', 'ظ', 'ع', 'غ', 'ف', 'ق', 'ك', 'ل', 'م', 'ن', 'هـ', 'و', 'ي'
+    ];
+
+    const ALL_CATEGORIES = [
+      { id: 'boy', name: 'اسم ولد', icon: '👦', example: 'أحمد، بدر، تامر' },
+      { id: 'girl', name: 'اسم بنت', icon: '👧', example: 'أمل، بسمة، تهاني' },
+      { id: 'animal', name: 'حيوان', icon: '🦁', example: 'أسد، بطة، تمساح' },
+      { id: 'plant', name: 'نبات/فواكه/خضار', icon: '🍎', example: 'أناناس، بطيخ، تفاح' },
+      { id: 'object', name: 'جماد', icon: '🪑', example: 'إبريق، باب، تلفاز' },
+      { id: 'country', name: 'بلاد/مدن', icon: '🌍', example: 'ألمانيا، بغداد، تركيا' },
+      { id: 'famous', name: 'ممثل/مشهور', icon: '🎬', example: 'أحمد حلمي، عادل إمام' },
+      { id: 'media', name: 'فيلم/مسلسل', icon: '📺', example: 'الجزيرة، رأفت الهجان' }
+    ];
+
+    const DEFAULT_NAMES = ["أحمد", "مريم", "يوسف", "سارة", "خالد", "هدى", "مصطفى", "نور", "علي", "فاطمة"];
+
+    // Game State variables
+    let players = [];
+    let activePlayerIndex = 0;
+    let selectedCategories = [];
+    let currentLetter = '';
+    let currentCategory = null;
+    let timerDuration = 15;
+    let timeLeft = 15;
+    let timerInterval = null;
+    let isSoundEnabled = true;
+    let roundCount = 1;
+    let audioCtx = null;
+
+    // History tracker to avoid repeated Letter + Category pairs
+    let usedPairs = new Set();
+
+    // DOM Elements
+    const soundToggle = document.getElementById('soundToggle');
+    const setupScreen = document.getElementById('setupScreen');
+    const gameplayScreen = document.getElementById('gameplayScreen');
+    
+    const playerCountSelect = document.getElementById('playerCount');
+    const playerNamesContainer = document.getElementById('playerNamesContainer');
+    const categoriesContainer = document.getElementById('categoriesContainer');
+    const timerValueSelect = document.getElementById('timerValue');
+    const startGameBtn = document.getElementById('startGameBtn');
+
+    const currentTurnAvatar = document.getElementById('currentTurnAvatar');
+    const currentTurnPlayer = document.getElementById('currentTurnPlayer');
+    const roundIndicator = document.getElementById('roundIndicator');
+    const letterDisplay = document.getElementById('letterDisplay');
+    const categoryDisplayIcon = document.getElementById('categoryDisplayIcon');
+    const categoryDisplayName = document.getElementById('categoryDisplayName');
+    const categoryExample = document.getElementById('categoryExample');
+    const timerDisplay = document.getElementById('timerDisplay');
+    const timerProgress = document.getElementById('timerProgress');
+    
+    const answerCorrectBtn = document.getElementById('answerCorrectBtn');
+    const answerWrongBtn = document.getElementById('answerWrongBtn');
+    const scoreboardBody = document.getElementById('scoreboardBody');
+    const resetGameBtn = document.getElementById('resetGameBtn');
+    const toast = document.getElementById('toast');
+
+    // Web Audio Synthesizer sound generator
+    function initAudio() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+    }
+
+    function playSound(type) {
+      if (!isSoundEnabled) return;
+      try {
+        initAudio();
+        if (audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+        
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        const now = audioCtx.currentTime;
+
+        if (type === 'tick') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(800, now);
+          gain.gain.setValueAtTime(0.04, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+          osc.start(now);
+          osc.stop(now + 0.05);
+        } else if (type === 'correct') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(523.25, now); // C5
+          osc.frequency.setValueAtTime(659.25, now + 0.1); // E5
+          osc.frequency.setValueAtTime(783.99, now + 0.2); // G5
+          gain.gain.setValueAtTime(0.12, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+          osc.start(now);
+          osc.stop(now + 0.4);
+        } else if (type === 'wrong') {
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(160, now);
+          osc.frequency.exponentialRampToValueAtTime(80, now + 0.35);
+          gain.gain.setValueAtTime(0.15, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+          osc.start(now);
+          osc.stop(now + 0.35);
+        } else if (type === 'timer_warning') {
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(440, now);
+          gain.gain.setValueAtTime(0.08, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+          osc.start(now);
+          osc.stop(now + 0.12);
+        } else if (type === 'click') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(600, now);
+          gain.gain.setValueAtTime(0.03, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.03);
+          osc.start(now);
+          osc.stop(now + 0.03);
+        }
+      } catch (e) {
+        console.warn("Audio Context blocked or unsupported:", e);
+      }
+    }
+
+    // Toggle Sound Handler
+    soundToggle.addEventListener('click', () => {
+      isSoundEnabled = !isSoundEnabled;
+      if (isSoundEnabled) {
+        soundToggle.innerText = '🔊';
+        showToast("📢 تم تفعيل المؤثرات الصوتية");
+      } else {
+        soundToggle.innerText = '🔇';
+        showToast("🔇 تم كتم الأصوات");
+      }
+      playSound('click');
+    });
+
+    // Toast show helper
+    function showToast(text) {
+      toast.innerText = text;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2500);
+    }
+
+    // Generate Dynamic Inputs in Setup screen
+    function renderPlayerInputs() {
+      const count = parseInt(playerCountSelect.value);
+      playerNamesContainer.innerHTML = '';
+      
+      for (let i = 0; i < count; i++) {
+        const div = document.createElement('div');
+        div.className = 'name-input-wrapper';
+        
+        const defaultName = DEFAULT_NAMES[i % DEFAULT_NAMES.length];
+        
+        div.innerHTML = `
+          <span class="name-num-badge">${i + 1}</span>
+          <input type="text" id="playerName_${i}" placeholder="اسم اللاعب ${i+1}" value="${defaultName}" autocomplete="off">
+        `;
+        playerNamesContainer.appendChild(div);
+      }
+    }
+
+    // Generate Dynamic Categories Checklist in Setup screen
+    function renderCategories() {
+      categoriesContainer.innerHTML = '';
+      ALL_CATEGORIES.forEach((cat, index) => {
+        const label = document.createElement('label');
+        label.className = 'category-checkbox';
+        
+        // select all categories by default for exciting game
+        const checkedAttr = 'checked';
+        
+        label.innerHTML = `
+          <input type="checkbox" value="${cat.id}" ${checkedAttr}>
+          <div class="category-card">
+            <span class="category-icon">${cat.icon}</span>
+            <div class="category-details">
+              <span class="category-name">${cat.name}</span>
+              <span class="category-example">مثال: ${cat.example}</span>
+            </div>
+            <div class="category-badge"></div>
+          </div>
+        `;
+        categoriesContainer.appendChild(label);
+      });
+    }
+
+    // Initial setup renderings
+    playerCountSelect.addEventListener('change', () => {
+      playSound('click');
+      renderPlayerInputs();
+    });
+    renderPlayerInputs();
+    renderCategories();
+
+    // Start Game Functionality
+    startGameBtn.addEventListener('click', () => {
+      playSound('click');
+      
+      // Parse Players
+      const count = parseInt(playerCountSelect.value);
+      players = [];
+      for (let i = 0; i < count; i++) {
+        const inputVal = document.getElementById(`playerName_${i}`).value.trim();
+        const finalName = inputVal || `اللاعب ${i + 1}`;
+        players.push({
+          id: 'p_' + i,
+          name: finalName,
+          score: 0,
+          correctAnswersCount: 0,
+          wrongAnswersCount: 0
+        });
+      }
+
+      // Parse Categories
+      selectedCategories = [];
+      const checkedBoxes = categoriesContainer.querySelectorAll('input:checked');
+      checkedBoxes.forEach(box => {
+        const catObj = ALL_CATEGORIES.find(c => c.id === box.value);
+        if (catObj) selectedCategories.push(catObj);
+      });
+
+      if (selectedCategories.length === 0) {
+        showToast("⚠️ يجب اختيار فئة واحدة على الأقل للعب!");
+        return;
+      }
+
+      // Parse Timer
+      timerDuration = parseInt(timerValueSelect.value);
+
+      // Reset state variables
+      activePlayerIndex = 0;
+      roundCount = 1;
+      usedPairs.clear();
+
+      // Screen transition
+      setupScreen.classList.remove('active');
+      gameplayScreen.classList.add('active');
+
+      // Start gameplay loop
+      nextTurn(true);
+    });
+
+    // Reset game and return to setup screen
+    resetGameBtn.addEventListener('click', () => {
+      playSound('click');
+      clearInterval(timerInterval);
+      
+      gameplayScreen.classList.remove('active');
+      setupScreen.classList.add('active');
+    });
+
+    // Core Game Logic: Next Turn and Round Generation
+    function nextTurn(isFirstTurn = false) {
+      if (!isFirstTurn) {
+        activePlayerIndex = (activePlayerIndex + 1) % players.length;
+        if (activePlayerIndex === 0) {
+          roundCount++;
+        }
+      }
+
+      // Update Round Indicator
+      roundIndicator.innerText = `الجولة: ${roundCount}`;
+
+      // Select and display current turn player
+      const currentPlayer = players[activePlayerIndex];
+      currentTurnPlayer.innerText = currentPlayer.name;
+      currentTurnAvatar.innerText = currentPlayer.name.charAt(0);
+
+      // Select unique Letter + Category
+      selectNewChallenge();
+
+      // Setup and trigger timer
+      startRoundTimer();
+
+      // Re-render scoreboard with active status
+      renderScoreboard();
+    }
+
+    function selectNewChallenge() {
+      if (selectedCategories.length === 0) return;
+
+      let foundNew = false;
+      let attempts = 0;
+      let letter = '';
+      let category = null;
+
+      // Keep looking for a unique combination, fallback if all used
+      while (!foundNew && attempts < 150) {
+        letter = ARABIC_LETTERS[Math.floor(Math.random() * ARABIC_LETTERS.length)];
+        category = selectedCategories[Math.floor(Math.random() * selectedCategories.length)];
+        
+        const pairKey = `${letter}_${category.id}`;
+        if (!usedPairs.has(pairKey)) {
+          usedPairs.add(pairKey);
+          foundNew = true;
+        }
+        attempts++;
+      }
+
+      // Fallback: Clear if exhausted and re-seed
+      if (!foundNew) {
+        usedPairs.clear();
+        letter = ARABIC_LETTERS[Math.floor(Math.random() * ARABIC_LETTERS.length)];
+        category = selectedCategories[Math.floor(Math.random() * selectedCategories.length)];
+        usedPairs.add(`${letter}_${category.id}`);
+      }
+
+      currentLetter = letter;
+      currentCategory = category;
+
+      // Render challenge on screen
+      letterDisplay.innerText = currentLetter;
+      categoryDisplayIcon.innerText = currentCategory.icon;
+      categoryDisplayName.innerText = currentCategory.name;
+      categoryExample.innerText = `المثال: ${currentCategory.example}`;
+    }
+
+    function startRoundTimer() {
+      clearInterval(timerInterval);
+      timeLeft = timerDuration;
+      
+      updateTimerUI();
+
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        updateTimerUI();
+
+        if (timeLeft <= 0) {
+          clearInterval(timerInterval);
+          handleRoundOutcome(false, true); // timeout failure
+        } else if (timeLeft <= 4) {
+          // Play warning beeps for last 4 seconds
+          playSound('timer_warning');
+        } else {
+          playSound('tick');
+        }
+      }, 1000);
+    }
+
+    function updateTimerUI() {
+      timerDisplay.innerText = `⏱ ${timeLeft}ث`;
+      const percentage = (timeLeft / timerDuration) * 100;
+      timerProgress.style.width = `${percentage}%`;
+
+      if (timeLeft <= 4) {
+        timerDisplay.classList.add('danger');
+        timerProgress.classList.add('danger');
+      } else {
+        timerDisplay.classList.remove('danger');
+        timerProgress.classList.remove('danger');
+      }
+    }
+
+    // Handles the point allocation and results
+    function handleRoundOutcome(isCorrect, isTimeout = false) {
+      clearInterval(timerInterval);
+      const currentPlayer = players[activePlayerIndex];
+
+      if (isCorrect) {
+        currentPlayer.score += 10;
+        currentPlayer.correctAnswersCount++;
+        playSound('correct');
+        showToast(`✨ إجابة صحيحة من ${currentPlayer.name}! (+10 نقاط)`);
+      } else {
+        currentPlayer.score = Math.max(0, currentPlayer.score - 5); // Don't drop below 0 to keep encouragement
+        currentPlayer.wrongAnswersCount++;
+        playSound('wrong');
+        
+        if (isTimeout) {
+          showToast(`⏳ انتهى الوقت على ${currentPlayer.name}! (-5 نقاط)`);
+        } else {
+          showToast(`❌ إجابة خاطئة أو تخطّي من ${currentPlayer.name}! (-5 نقاط)`);
+        }
+      }
+
+      // Move to next turn
+      setTimeout(() => {
+        nextTurn();
+      }, 1500);
+    }
+
+    // Buttons Event Listeners
+    answerCorrectBtn.addEventListener('click', () => {
+      // guard to prevent multiple rapid clicks while turn is transitioning
+      if (answerCorrectBtn.disabled) return;
+      disableTurnControls(true);
+      handleRoundOutcome(true);
+    });
+
+    answerWrongBtn.addEventListener('click', () => {
+      if (answerWrongBtn.disabled) return;
+      disableTurnControls(true);
+      handleRoundOutcome(false);
+    });
+
+    function disableTurnControls(disable) {
+      answerCorrectBtn.disabled = disable;
+      answerWrongBtn.disabled = disable;
+      if (!disable) {
+        answerCorrectBtn.style.opacity = '1';
+        answerWrongBtn.style.opacity = '1';
+      } else {
+        answerCorrectBtn.style.opacity = '0.5';
+        answerWrongBtn.style.opacity = '0.5';
+      }
+    }
+
+    // Reset button states when loading a new turn
+    function renderScoreboard() {
+      disableTurnControls(false);
+
+      // Sort players clone for leader calculations
+      const sortedPlayers = [...players].sort((a, b) => b.score - a.score);
+      const leadingScore = sortedPlayers[0].score;
+
+      scoreboardBody.innerHTML = '';
+      
+      sortedPlayers.forEach((player, index) => {
+        const isLeading = player.score === leadingScore && leadingScore > 0;
+        const isActiveTurn = players[activePlayerIndex].id === player.id;
+        
+        const row = document.createElement('tr');
+        row.className = `player-row ${isActiveTurn ? 'active-row' : ''}`;
+        
+        row.innerHTML = `
+          <td class="rank-cell">
+            <span class="rank-badge">${index + 1}</span>
+          </td>
+          <td>
+            <div class="player-name-cell">
+              ${isLeading ? '👑 ' : ''}
+              <span>${player.name}</span>
+              ${isActiveTurn ? '<span class="stat-badge" style="background: rgba(6,182,212,0.2); color: var(--primary);">دوره الآن</span>' : ''}
+            </div>
+          </td>
+          <td style="text-align: center; font-size: 0.85rem; color: var(--text-muted);">
+            <span style="color: var(--success);">${player.correctAnswersCount}صح</span> / 
+            <span style="color: var(--danger);">${player.wrongAnswersCount}خطأ</span>
+          </td>
+          <td style="text-align: left; padding-left: 0.5rem;">
+            <span class="score-badge">${player.score}</span>
+          </td>
+        `;
+        scoreboardBody.appendChild(row);
+      });
+    }
+
+  </script>
+</body>
+</html>
